@@ -1,0 +1,70 @@
+1
+​
+2
+// ==UserScript==
+3
+// @name         **FREE SKINS** **WORKING OCTOBER 2021** (Shell Shockers.io)
+4
+// @version      0.3
+5
+// @description  Access to every skin in shell shockers? Here you go!
+6
+// @match        *://shellshock.io/*
+7
+// @run-at       document-start
+8
+// @grant        unsafeWindow
+9
+// @namespace    https://greasyfork.org/users/815159
+10
+// ==/UserScript==
+11
+(function () {
+12
+    unsafeWindow.XMLHttpRequest = class extends unsafeWindow.XMLHttpRequest {
+13
+        constructor() {
+14
+            super(...arguments);
+15
+        }
+16
+        open() {
+17
+            if (arguments[1] && arguments[1].includes("src/shellshock.js")) {
+18
+                this.scriptMatch = true;
+19
+            }
+20
+​
+21
+            super.open(...arguments);
+22
+        }
+23
+        get response() {
+24
+​
+25
+            if (this.scriptMatch) {
+26
+                let responseText = super.response;
+27
+​
+28
+                let match = responseText.match(/inventory\[[A-z]\].id===[A-z].id\)return!0;return!1/);
+29
+                if (match) responseText = responseText.replace(match[0], match[0] + `||true`);
+30
+                return responseText;
+31
+            }
+32
+            return super.response;
+33
+        }
+34
+    };
+35
+}())
